@@ -1,0 +1,11 @@
+Alex Smith, “”, “student at RMIT”, M, 21, WABen Turner, “BenPhoto.jpg”, “manager at Coles”, M, 35, VICHannah White, “Hannah.png”, “student at PLC”, F, 14, VICZoe Foster, “”, “Founder of ZFX”, F, 28, VICMark Turner, “Mark.jpeg”, “”, M, 2, VIC
+John Warner, "JohnnyBoy.jpg", "Jedi Knight", M, 15, NSW
+Angela McKenzie, "Ange.jpg", "Supervisor at Coles", F, 31, VIC
+Sophia Sophmore, "LilBub.jpg", "Oh so cute!", F, 1, VIC
+Andrew Chang, "AndrewInQLD".jpg", "I Love Studying at RMIT!", M, 20, VIC
+Joanna Daydream, "DaydreaminJoanna.jpg", "Head in the clouds!", F, 12, VIC
+Rob Creath, "Robbie.jpg", "", M, 36, ACT
+Shannon Robson, "Shazza.jpg", "Lovin this new job!", F, 32, ACT
+Alia Creath, "Alia.jpg", "Look at my sweet blue eyes", F, 1, ACT
+Christine Mississippi, "Christine.jpg", "Underling at ZFX", F, 24, VIC
+Albus Dumbledore, "MovingAlbus.jpg", "Help will always come to those who deserve it.", M, 160, VIC 
