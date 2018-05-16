@@ -1,4 +1,4 @@
-package A2;
+package Exceptions;
 
 public class NotToBeFriendsException extends Exception {
 

@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import Exceptions.NoSuchAgeException;
+import Exceptions.NotToBeColleaguesException;
+import Exceptions.NotToBeFriendsException;
+import Exceptions.TooYoungException;
+
 public class MiniNet {
 
 	public static void main(String[] args) {
