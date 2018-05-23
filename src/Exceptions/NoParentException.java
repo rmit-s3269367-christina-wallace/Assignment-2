@@ -2,8 +2,9 @@ package Exceptions;
 
 public class NoParentException extends Exception {
 
-	public NoParentException() {
+	public NoParentException(String name) {
 		super();
-		System.out.println("Error: Children must have two parents who are in a couple.");
+		System.err.println("Error: Children must have two parents who are in a couple.");
+		System.err.println(name + " is not in a couple.");
 	}
 }

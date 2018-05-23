@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import Exceptions.NoParentException;
 import Exceptions.NoSuchAgeException;
@@ -15,6 +16,9 @@ import Exceptions.NotToBeColleaguesException;
 import Exceptions.NotToBeCoupledException;
 import Exceptions.NotToBeFriendsException;
 import Exceptions.TooYoungException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 public class MiniNet {
 
@@ -108,6 +112,7 @@ public class MiniNet {
 					if (relationship.equals("friends")) {
 						if (p1.isYoungChild() || p2.isYoungChild()) {
 							throw new TooYoungException(p1.getName(), p2.getName(), p1.getAge(), p2.getAge());
+							
 						}
 	
 						if ((p1.isChild() && !p2.isChild()) || (p2.isChild() && !p1.isChild())) {
@@ -142,63 +147,57 @@ public class MiniNet {
 					} else if (relationship.equals("parent")) {
 						if (p1.isChild() || p1.isYoungChild()) {
 							if (!p2.hasPartner()) {
-								throw new NoParentException();
+								throw new NoParentException(p2.getName());
 							}
 						}
 						if (p2.isChild() || p2.isYoungChild()) {
 							if (!p1.hasPartner()) {
-								throw new NoParentException();
+								throw new NoParentException(p1.getName());
 							}
 						}
 	
 						if (p1.isChild()) {
 							if (!p2.isChild()) {
 								p1.addParent(person2);
+								p2.addChild(person1);
+								Person partner = users.get(p2.showPartner());
+								partner.addChild(person1);
+								
+								
 							}
 						} else if (p2.isChild()) {
 							if (!p1.isChild()) {
 								p2.addParent(person1);
+								p1.addChild(person2);
 							}
 						}
 	
 					} else if (relationship.equals("couple")) {
 						if (p1.isChild() || p2.isChild()) {
-							throw new NotToBeCoupledException(p1.getName(), p2.getName(), p1.getAge(), p2.getAge());
+							throw new NotToBeCoupledException();
 						}
-						if ((p1.hasPartner() == true) || (p2.hasPartner() == true)) {
-							throw new NotAvailableException();
+						if (p1.hasPartner() == true) {
+								throw new NotAvailableException();
+						}
+							else if (p2.hasPartner() == true) {
+								throw new NotAvailableException();
+						}
 						}
 	
 						p1.addPartner(person2);
 						p2.addPartner(person1);
 	
-					} else {
-						throw new NonSpecifiedRelationshipException(relationship, p1.getAge(), p2.getAge());
-					}
+						 
+						//throw new NonSpecifiedRelationshipException(relationship, p1.getAge(), p2.getAge());
+				
 				} catch (TooYoungException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NotToBeFriendsException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NotToBeColleaguesException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NotToBeClassmatesException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NonSpecifiedRelationshipException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				//} catch (NonSpecifiedRelationshipException e) {
 				} catch (NotToBeCoupledException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NotAvailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NoParentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 				next = input.readLine();
 			}
