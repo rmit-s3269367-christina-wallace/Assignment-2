@@ -14,7 +14,7 @@ public class NoSuchAgeException extends Exception {
 			
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error Dialog");
-		alert.setHeaderText("Error: Age must be between 0 and 150 years.");
+		alert.setHeaderText("Error: Invalid Age.");
 		alert.setContentText("Please enter an age between 0 and 150 years.");
 		alert.showAndWait();
 

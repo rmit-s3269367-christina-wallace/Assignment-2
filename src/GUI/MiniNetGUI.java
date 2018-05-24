@@ -5,6 +5,7 @@ import java.util.Map;
 import A2.MiniNet;
 import A2.Person;
 import Exceptions.NoOneSelectedException;
+import Exceptions.NoSuchAgeException;
 import Exceptions.NotAvailableException;
 import Exceptions.NotToBeClassmatesException;
 import Exceptions.NotToBeColleaguesException;
@@ -22,6 +23,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -58,11 +61,6 @@ public class MiniNetGUI extends Application {
 	Person p1;
 	Person p2;
 
-	/*
-	 * Map<String, Person> users = new HashMap<String, Person>(); Person p1 =
-	 * users.get(person1); Person p2 = users.get(person2);
-	 */
-
 	public static void main(String[] args) {
 
 		users = MiniNet.readPeopleFile("people.txt");
@@ -84,7 +82,8 @@ public class MiniNetGUI extends Application {
 		label.setFont(new Font("Arial", 20));
 
 		personTable.setEditable(true);
-		relationshipTable.setEditable(true);
+		
+		//Setting column names for Person Table
 
 		TableColumn nameCol = new TableColumn("Name");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
@@ -102,6 +101,8 @@ public class MiniNetGUI extends Application {
 		personTable.setItems(data);
 		personTable.getColumns().addAll(nameCol, statusCol, ageCol, genderCol, stateCol, photoCol);
 
+		//Creating Text Fields for Adding a new Person to the list.
+		
 		final TextField addName = new TextField();
 		addName.setPromptText("Name");
 		addName.setMaxWidth(nameCol.getPrefWidth());
@@ -120,11 +121,16 @@ public class MiniNetGUI extends Application {
 		final TextField addPhoto = new TextField();
 		addPhoto.setMaxWidth(photoCol.getPrefWidth());
 		addPhoto.setPromptText("Photo");
+		
+		//Creating Text Field to display a Person's Children or Parents.
 
 		final TextField displayField = new TextField();
-		displayField.setMinWidth(300);
-		displayField.setPromptText("Display");
+		displayField.setMinWidth(530);
+		displayField.setPromptText("Display Children/Parents");
 
+		//Creating Text Fields (Display 2 and 3) to set Person 1 and 2 for 
+		//when setting a new relationship.
+		
 		final TextField displayField2 = new TextField();
 		displayField2.setMinWidth(300);
 		displayField2.setPromptText("Display 2");
@@ -133,34 +139,51 @@ public class MiniNetGUI extends Application {
 		displayField3.setMinWidth(300);
 		displayField3.setPromptText("Display 3");
 
+		//A text field to display a list of relationships.
+		
 		final TextArea displayField4 = new TextArea();
 		displayField4.setMinWidth(600);
 		displayField4.setMinHeight(100);
 		displayField4.setPromptText("Display 4");
 
+		//A text field to display instructions for how to create a new relationship.
+		
 		final TextField displayField5 = new TextField();
 		displayField5.setMinWidth(600);
 		displayField5.setMinHeight(30);
 		displayField5.setPromptText("Instruction Text");
 
+		//Creating the 'Add' Button to add new users to the program.
+		
 		final Button addButton = new Button("Add");
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				users.put(addName.getText(), new Person(addName.getText(), addPhoto.getText(), addStatus.getText(),
-						addGender.getText(), Integer.parseInt(addAge.getText()), addState.getText()));
-
-				data.clear();
-				data.addAll(users.values());
-
-				addName.clear();
-				addPhoto.clear();
-				addStatus.clear();
-				addGender.clear();
-				addAge.clear();
-				addState.clear();
+				
+				try {
+					if (Integer.parseInt(addAge.getText()) < 0 || Integer.parseInt(addAge.getText()) >150) {
+						throw new NoSuchAgeException("gui");
+					}
+					
+					users.put(addName.getText(), new Person(addName.getText(), addPhoto.getText(), addStatus.getText(),
+							addGender.getText(), Integer.parseInt(addAge.getText()), addState.getText()));
+	
+					data.clear();
+					data.addAll(users.values());
+	
+					addName.clear();
+					addPhoto.clear();
+					addStatus.clear();
+					addGender.clear();
+					addAge.clear();
+					addState.clear();
+				} catch (NoSuchAgeException error) {
+					
+				}
 			}
 		});
+		
+		//Creating a Delete Button to delete a person from the program.
 
 		final Button deleteButton = new Button("Delete");
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -168,6 +191,8 @@ public class MiniNetGUI extends Application {
 			public void handle(ActionEvent e) {
 
 				Person p1 = users.get(personTable.getSelectionModel().getSelectedItem().getName());
+				
+				//Removing deleted friend from related friends as well.
 				
 				for (String person2 : p1.getFriends()) {
 					Person p2 = users.get(person2);
@@ -191,16 +216,14 @@ public class MiniNetGUI extends Application {
 					p2.removeParent(p1.getName());
 				}
 				
-				
-				
 				users.remove(p1.getName());
 				data.clear();
 				data.addAll(users.values());
-				
-
 			}
 		});
 
+		//Creating an exit button to exit the program.
+		
 		final Button exitButton = new Button("Exit");
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -208,6 +231,9 @@ public class MiniNetGUI extends Application {
 				System.exit(0);
 			}
 		});
+		
+		//Creating a Show Parents Button that will display a child's parents in 
+		//a text field created earlier.
 
 		final Button showParentsButton = new Button("Show parents");
 		showParentsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -217,6 +243,9 @@ public class MiniNetGUI extends Application {
 				displayField.setText(person.showParents());
 			}
 		});
+		
+		//Creating a Show Children Button that will display a parent's children in 
+		//a text field created earlier.
 
 		final Button showChildrenButton = new Button("Show Children");
 		showChildrenButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -226,14 +255,8 @@ public class MiniNetGUI extends Application {
 				displayField.setText(person.showChildren());
 			}
 		});
-
-		final Button addRelationButton = new Button("Add New Relationship");
-		addRelationButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				displayField5.setText("Select first person to connect. Then click 'Person 1'");
-			}
-		});
+		
+		//Creating a Show Relationships button that will list the relationships of the selected person.
 
 		final Button showRelationshipsButton = new Button("Show Relationships");
 		showRelationshipsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -254,6 +277,19 @@ public class MiniNetGUI extends Application {
 				}
 			}
 		});
+		
+		//Creating an Add New Relationship button that provides instructions for adding relationships.
+
+		final Button addRelationButton = new Button("Add New Relationship");
+		addRelationButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				displayField5.setText("Select first person to connect. Then click 'Person 1'");
+			}
+		});
+		
+		//Selecting the first person for the new relationship. This is then displayed in a text field.
+		//Instruction text updates.
 
 		final Button showPersonSelectedButton = new Button("Person 1");
 		showPersonSelectedButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -264,6 +300,9 @@ public class MiniNetGUI extends Application {
 				displayField5.setText("Select second person then click Person 2.");
 			}
 		});
+		
+		//Selecting the second person for the new relationship. This is then displayed in a text field.
+		//Instruction text updates.
 
 		final Button showPerson2SelectedButton = new Button("Person 2");
 		showPerson2SelectedButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -274,6 +313,8 @@ public class MiniNetGUI extends Application {
 				displayField5.setText("Choose relationship to add, then click 'Add Relationship'.");
 			}
 		});
+		
+		//Creating radio buttons to choose relationship type.
 
 		final ToggleGroup group = new ToggleGroup();
 
@@ -306,6 +347,8 @@ public class MiniNetGUI extends Application {
 				}
 			}
 		});
+		
+		// Finally the Add Relationship adds the selected relationship to Person 1 and Person 2.
 
 		final Button addRelationshipButton = new Button("Add Relationship");
 		addRelationshipButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -334,18 +377,35 @@ public class MiniNetGUI extends Application {
 						}
 						p1.addFriend(p2.getName());
 						p2.addFriend(p1.getName());
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Information Dialog");
+						alert.setHeaderText("Friend relationship has been added.");
+
+						alert.showAndWait();
 					} else if (group.getSelectedToggle().getUserData().equals("Colleagues")) {
 						if (p1.isChild() || p2.isChild()) {
 							throw new NotToBeColleaguesException("gui");
 						}
 						p1.addColleague(p2.getName());
 						p2.addColleague(p1.getName());
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Information Dialog");
+						alert.setHeaderText("Colleague relationship has been added.");
+
+						alert.showAndWait();
+						
 					} else if (group.getSelectedToggle().getUserData().equals("Classmates")) {
 						if (p1.isYoungChild() || p2.isYoungChild()) {
 							throw new NotToBeClassmatesException("gui");
 						}
 						p1.addClassmate(p2.getName());
 						p2.addClassmate(p1.getName());
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Information Dialog");
+						alert.setHeaderText("Classmate relationship has been added.");
+
+						alert.showAndWait();
+						
 					} else if (group.getSelectedToggle().getUserData().equals("Couple")) {
 						if (p1.isChild() || p2.isChild()) {
 							throw new NotToBeCoupledException("gui");
@@ -358,6 +418,12 @@ public class MiniNetGUI extends Application {
 
 						p1.addPartner(p2.getName());
 						p2.addPartner(p1.getName());
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Information Dialog");
+						alert.setHeaderText("Partner relationship has been added.");
+
+						alert.showAndWait();
+						
 					}
 				} catch (TooYoungException e1) {
 				} catch (NotToBeFriendsException e1) {
@@ -368,8 +434,6 @@ public class MiniNetGUI extends Application {
 				} catch (NotAvailableException e1) {
 				}
 
-				System.out.println("Relationship has been added.'");
-
 			}
 
 			private Window getPrimaryStage() {
@@ -378,6 +442,8 @@ public class MiniNetGUI extends Application {
 			}
 		});
 		{
+			
+			//Adding buttons and fields to layout fields.
 
 			textFields.getChildren().addAll(addName, addPhoto, addStatus, addGender, addAge, addState, addButton,
 					deleteButton, exitButton, showParentsButton, showChildrenButton, displayField);

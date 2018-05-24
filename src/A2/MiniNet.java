@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import Exceptions.NoParentException;
 import Exceptions.NoSuchAgeException;
-import Exceptions.NonSpecifiedRelationshipException;
 import Exceptions.NotAvailableException;
 import Exceptions.NotToBeClassmatesException;
 import Exceptions.NotToBeColleaguesException;
@@ -62,7 +61,7 @@ public class MiniNet {
 
 				try {
 					if (age < 0 || age > 150) {
-						throw new NoSuchAgeException(name);
+						throw new NoSuchAgeException();
 					}
 					
 					Person p = new Person(name, photoURL, status, gender, age, state);
@@ -112,7 +111,6 @@ public class MiniNet {
 					if (relationship.equals("friends")) {
 						if (p1.isYoungChild() || p2.isYoungChild()) {
 							throw new TooYoungException(p1.getName(), p2.getName(), p1.getAge(), p2.getAge());
-							
 						}
 	
 						if ((p1.isChild() && !p2.isChild()) || (p2.isChild() && !p1.isChild())) {
@@ -187,14 +185,12 @@ public class MiniNet {
 						p1.addPartner(person2);
 						p2.addPartner(person1);
 	
-						 
-						//throw new NonSpecifiedRelationshipException(relationship, p1.getAge(), p2.getAge());
+					
 				
 				} catch (TooYoungException e) {
 				} catch (NotToBeFriendsException e) {
 				} catch (NotToBeColleaguesException e) {
 				} catch (NotToBeClassmatesException e) {
-				//} catch (NonSpecifiedRelationshipException e) {
 				} catch (NotToBeCoupledException e) {
 				} catch (NotAvailableException e) {
 				} catch (NoParentException e) {
