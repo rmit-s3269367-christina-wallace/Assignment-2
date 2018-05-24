@@ -19,9 +19,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
-public class MiniNet {
+public class MiniNetDataEntry {
 
-	public static void main(String[] args) {
+	public static void fileEntry() {
 		// TODO Auto-generated method stub
 		Map<String, Person> users = null;
 

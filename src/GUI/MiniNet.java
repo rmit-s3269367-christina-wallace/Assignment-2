@@ -2,7 +2,7 @@ package GUI;
 
 import java.util.Map;
 
-import A2.MiniNet;
+import A2.MiniNetDataEntry;
 import A2.Person;
 import Exceptions.NoOneSelectedException;
 import Exceptions.NoSuchAgeException;
@@ -41,7 +41,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class MiniNetGUI extends Application {
+public class MiniNet extends Application {
 
 	private TableView<Person> personTable = new TableView<Person>();
 	private TableView<Person> relationshipTable = new TableView<Person>();
@@ -63,8 +63,8 @@ public class MiniNetGUI extends Application {
 
 	public static void main(String[] args) {
 
-		users = MiniNet.readPeopleFile("people.txt");
-		MiniNet.readRelationshipsFile("relations.txt", users);
+		users = MiniNetDataEntry.readPeopleFile("people.txt");
+		MiniNetDataEntry.readRelationshipsFile("relations.txt", users);
 		data = FXCollections.observableArrayList();
 		data.addAll(users.values());
 
